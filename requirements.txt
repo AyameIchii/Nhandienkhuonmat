@@ -3,5 +3,5 @@ uvicorn
 tensorflow
 numpy
 pillow
-opencv-python-headless
 gdown
+python-multipart   # 👈 thêm dòng này
