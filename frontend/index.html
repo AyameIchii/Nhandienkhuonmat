@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Nhận diện tuổi & giới tính</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+    .preview { margin: 20px; }
+    img { max-width: 300px; border-radius: 12px; }
+    .result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+    button { margin-top: 10px; padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>📸 Nhận diện Tuổi & Giới tính</h1>
+  <input type="file" id="fileInput" accept="image/*" />
+  <div class="preview" id="preview"></div>
+  <button onclick="predict()">Dự đoán</button>
+  <div class="result" id="result"></div>
+
+  <script>
+    const API_URL = "https://<tên-service-backend>.onrender.com/predict"; 
+    // 👆 sửa link này thành backend Render của bạn
+
+    let selectedFile = null;
+
+    document.getElementById("fileInput").addEventListener("change", (event) => {
+      selectedFile = event.target.files[0];
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById("preview").innerHTML = `<img src="${e.target.result}" />`;
+        };
+        reader.readAsDataURL(selectedFile);
+      }
+    });
+
+    async function predict() {
+      if (!selectedFile) {
+        alert("Hãy chọn một ảnh trước!");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        document.getElementById("result").innerText = `👤 Tuổi: ${data.age}, Giới tính: ${data.gender}`;
+      } catch (err) {
+        document.getElementById("result").innerText = "❌ Lỗi khi gọi API";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
