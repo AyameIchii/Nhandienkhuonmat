@@ -1,11 +1,23 @@
+import os, io
+import numpy as np
+from PIL import Image
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from tensorflow.keras.models import load_model
-import numpy as np, cv2, io
-from PIL import Image
+import gdown
 
 IMG_SIZE = 224
-model = load_model("age_gender_model_vgg16_balanced.h5")
+MODEL_PATH = "age_gender_model_vgg16_balanced.h5"
+DRIVE_ID = "1gpBr8_U9bW9ZWQwdUO0J_hIfJh4q8v41"  # thay bằng ID từ link Drive
+URL = f"https://drive.google.com/uc?id={DRIVE_ID}"
+
+# tải model nếu chưa có
+if not os.path.exists(MODEL_PATH):
+    print("⬇️ Đang tải model từ Google Drive...")
+    gdown.download(URL, MODEL_PATH, quiet=False)
+
+print("✅ Model ready")
+model = load_model(MODEL_PATH)
 
 app = FastAPI()
 app.add_middleware(
