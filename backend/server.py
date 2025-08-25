@@ -17,7 +17,7 @@ if not os.path.exists(MODEL_PATH):
     gdown.download(URL, MODEL_PATH, quiet=False)
 
 print("✅ Model ready")
-model = load_model(MODEL_PATH)
+model = load_model(MODEL_PATH, compile=False)   # thêm compile=False
 
 app = FastAPI()
 app.add_middleware(
