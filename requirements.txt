@@ -6,3 +6,4 @@ gdown
 python-multipart   # 👈 thêm dòng này
 tensorflow==2.10.0
 keras==2.10.0
+numpy==1.23.5
